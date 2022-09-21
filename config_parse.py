@@ -1,9 +1,6 @@
-from rich import print, pretty
 import re
 import yaml
 import json
-
-pretty.install()
 
 
 class ConfigParser:
@@ -49,7 +46,7 @@ class ConfigParser:
                 continue
 
             if re_indent_root.match(line):
-                str = str + re_indent_root.sub(r"- \1:", line)
+                str = str + re_indent_root.sub(r"\1:", line)
             elif re_indent_config.match(line):
                 str = str + re_indent_config.sub(r"\1- \2:", line)
             else:
