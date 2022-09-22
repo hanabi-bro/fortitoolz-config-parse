@@ -8,4 +8,6 @@ cp = ConfigParser()
 cp.load_config("tmp/test.conf")
 config = cp.to_dict()
 
-print(config["config system interface"])
+conf_fp = config["config firewall policy"]
+
+print(conf_fp)
