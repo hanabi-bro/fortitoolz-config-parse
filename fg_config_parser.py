@@ -9,10 +9,10 @@ re_next = re.compile(r"^ *(next)$")
 re_end = re.compile(r"^ *(end)$")
 
 
-class ConfigParser:
+class FgConfigParser:
     def __init__(self):
         self.raw = []
-        pass
+        self.vdom_keys = []
 
     def load_config(self, config_file):
         with open(config_file, "r", encoding="utf-8-sig") as f:
@@ -20,6 +20,8 @@ class ConfigParser:
 
         self._parse_to_yaml_raw()
         self.json_str = json.dumps(self.conf)
+
+        self.check_vdom()
 
     def _parse_to_yaml_raw(self):
         str = ""
@@ -72,9 +74,21 @@ class ConfigParser:
     def to_dict(self):
         return self.conf
 
+    def check_vdom(self):
+        use_vdom = False
+        if "config vdom" in self.conf[0].keys():
+            use_vdom = True
+
+        if use_vdom:
+            for c in self.conf[0]["config vdom"]:
+                self.vdom_keys.append(list(c.keys())[0])
+
+        else:
+            self.vdom_keys = ["vdom root"]
+
 
 if __name__ == "__main__":
-    cp = ConfigParser()
+    cp = FgConfigParser()
     cp.load_config("tmp/test2.conf")
     # print(cp.to_json())
     # with open("tmp/chk.yaml", "w", encoding="utf8") as f:
